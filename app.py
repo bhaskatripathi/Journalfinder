@@ -37,10 +37,20 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
     )
 
     return response.choices[0].text.strip()
-
-
-
 st.title("Journal Finder")
+
+def response_to_html_table(response):
+    rows = response.split("\n")
+    html_table = "<table border='1'>"
+    for row in rows:
+        html_table += "<tr>"
+        columns = row.split(";")
+        for column in columns:
+            html_table += f"<td>{column}</td>"
+        html_table += "</tr>"
+    html_table += "</table>"
+    return html_table
+
 
 with st.sidebar:
     api_key = st.text_input("API Key (masked)", type="password")
@@ -54,12 +64,13 @@ with st.sidebar:
 if st.button("Find Journals"):
     if api_key and title and abstract and keywords:
         result = journal_finder(api_key, title, abstract, ssci, scie, esci, keywords)
-
-        # Print the result
-        st.write("Result:")
-        st.write(result)
+        
+        # Convert the response to an HTML table
+        html_table = response_to_html_table(result)
+        
+        # Display the HTML table in Streamlit
+        st.markdown(html_table, unsafe_allow_html=True)
     else:
         st.error("Please fill in all required fields.")
-
 
 
