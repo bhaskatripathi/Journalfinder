@@ -54,20 +54,11 @@ if st.button("Find Journals"):
     if api_key and title and abstract and keywords:
         result = journal_finder(api_key, title, abstract, ssci, scie, esci, keywords)
 
-        # Parse the results to create a dataframe
-        journal_data = []
-
-        journal_list = re.split(r"\d{1,2}\.\s", result)[1:]
-
-        for item in journal_list:
-            journal_data.append(item.split("\n"))
-
-        df = pd.DataFrame(journal_data)
-        df.columns = df.iloc[0]
-        df = df[1:]
-
-        st.write(df)
+        # Print the result
+        st.write("Result:")
+        st.write(result)
     else:
         st.error("Please fill in all required fields.")
+
 
 
