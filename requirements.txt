@@ -3,4 +3,4 @@ openai
 requests
 pandas
 re
-openpyxl
+
