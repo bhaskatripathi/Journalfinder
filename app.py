@@ -46,7 +46,9 @@ if st.button("Find Journals"):
         # Parse the results to create a dataframe
         journal_data = []
 
-        for item in result.split("\n\n"):
+        journal_list = re.split(r"\d{1,2}\.\s", result)[1:]
+
+        for item in journal_list:
             name_match = re.search(r"^(.*)\s*\(", item)
             if name_match:
                 name = name_match.group(1)
@@ -84,6 +86,7 @@ if st.button("Find Journals"):
                 link = ""
 
             journal_data.append([name, impact_factor, indexed, acceptance_rate, review_speed, link])
+
 
 
         df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
