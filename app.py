@@ -91,13 +91,14 @@ if st.button("Find Journals"):
         # Convert the response to a DataFrame
         df = response_to_dataframe(result)
 
-        # Export to Excel button
-        if st.button("Export to Excel"):
-            filename = "journals.xlsx"
-            df.to_excel(filename, index=False)
+        # Export to CSV button
+        if st.button("Export to CSV"):
+            filename = "journals.csv"
+            df.to_csv(filename, index=False)
             st.success(f"File exported as {filename}")
     else:
         st.error("Please fill in all required fields.")
+
 
 
 
