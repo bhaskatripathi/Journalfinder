@@ -13,7 +13,7 @@ def chat_gpt_request(api_key, prompt):
             "stop": None,
         },
     }
-    response = requests.post("https://api.openai.com/v1/engines/davinci-codex/completions", headers=headers, json=data)
+    response = requests.post("https://api.openai.com/v1/engines/davinci/completions", headers=headers, json=data)
     response.raise_for_status()
     return response.json()["choices"][0]["text"].strip()
 
