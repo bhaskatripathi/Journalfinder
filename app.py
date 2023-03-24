@@ -3,6 +3,23 @@ import streamlit as st
 import pandas as pd
 import re
 
+import pandas as pd
+
+def response_to_dataframe(response):
+    rows = response.split("\n")
+    data = []
+
+    for row in rows:
+        if not row:
+            continue
+
+        columns = row.split(",")
+        data.append([col.strip() for col in columns])
+
+    df = pd.DataFrame(data, columns=["Journal", "Impact Factor", "Indexed In", "Acceptance Rate", "Review Speed", "URL"])
+    return df
+
+
 def chat_gpt_request(api_key, messages):
     openai.api_key = api_key
     response = openai.ChatCompletion.create(
@@ -25,12 +42,12 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
     indexed_str = ", ".join(indexed_in)
     publishers = "Sciencedirect, MDPI, IEEE, Wiley, Peerj, Emerald, PLOS"
 
-    prompt = f"Find the top 10 best-matching journals for the following paper that are indexed in {indexed_str} and are published by {publishers}. Include information on Impact Factor, Acceptance Rate, Review Speed, and URLs.\n\nTitle: {title}\n\nAbstract: {abstract}\n\nKeywords: {keywords}\n\n"
+    prompt = f"Find the top 15 best-matching journals for the following paper that are indexed in {indexed_str} and are published by {publishers}. Include information on Impact Factor, Acceptance Rate, Review Speed, and URLs.\n\nTitle: {title}\n\nAbstract: {abstract}\n\nKeywords: {keywords}\n\n"
 
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
-        max_tokens=1024,
+        max_tokens=2000,
         n=1,
         stop=None,
         temperature=0.5,
@@ -70,8 +87,18 @@ if st.button("Find Journals"):
         
         # Display the HTML table in Streamlit
         st.markdown(html_table, unsafe_allow_html=True)
+
+        # Convert the response to a DataFrame
+        df = response_to_dataframe(result)
+
+        # Export to Excel button
+        if st.button("Export to Excel"):
+            filename = "journals.xlsx"
+            df.to_excel(filename, index=False)
+            st.success(f"File exported as {filename}")
     else:
         st.error("Please fill in all required fields.")
+
 
 
 
