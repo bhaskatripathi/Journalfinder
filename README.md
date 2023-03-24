@@ -22,12 +22,12 @@ The Scientific Journal Finder is an experimental application that uses artificia
 The application provides suggestions and should not be considered a definitive source of information. 
 The application's results should always be verified by the user and cannot be used as a substitute for professional advice.
 
+# UML
 classDiagram
     class JournalFinder {
         +chat_gpt_request(api_key: str, messages: List[dict]) : str
         +journal_finder(api_key: str, title: str, abstract: str, ssci: bool, scie: bool, esci: bool, keywords: str) : str
     }
-    
     class StreamlitApp {
         +title: str
         +sidebar: object
