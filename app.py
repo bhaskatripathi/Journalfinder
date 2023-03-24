@@ -12,21 +12,32 @@ def chat_gpt_request(api_key, messages):
     return response.choices[0].message['content'].strip()
 
 def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
-    prompt = f"Find the 10 most relevant journals for the following paper based on its title, abstract, and keywords, and provide details including the impact factor, indexing, acceptance rate (if available), review speed, and link to the journal's website:\nTitle: {title}\nAbstract: {abstract}\nKeywords: {keywords}\n"
+    openai.api_key = api_key
+
+    indexed_in = []
     if ssci:
-        prompt += "Consider SSCI journals.\n"
+        indexed_in.append("SSCI")
     if scie:
-        prompt += "Consider SCIE journals.\n"
+        indexed_in.append("SCIE")
     if esci:
-        prompt += "Consider ESCI journals.\n"
-    prompt += "Do not consider Scopus journals."
+        indexed_in.append("ESCI")
 
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": prompt}
-    ]
+    indexed_str = ", ".join(indexed_in)
+    publishers = "Sciencedirect, MDPI, IEEE, Wiley, Peerj, Emerald, PLOS"
 
-    return chat_gpt_request(api_key, messages)
+    prompt = f"Find the top 10 best-matching journals for the following paper that are indexed in {indexed_str} and are published by {publishers}. Include information on Impact Factor, Acceptance Rate, and Review Speed.\n\nTitle: {title}\n\nAbstract: {abstract}\n\nKeywords: {keywords}\n\n"
+
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=prompt,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+
+    return response.choices[0].text.strip()
+
 
 st.title("Journal Finder")
 
@@ -73,7 +84,7 @@ if st.button("Find Journals"):
             else:
                 acceptance_rate = "Not publicly available"
 
-            review_speed_match = re.search(r"Review Speed:\s*(.*?)\s+from", item)
+            review_speed_match = re.search(r"Review Speed:\s*(.*?)\s*\n", item, re.MULTILINE)
             if review_speed_match:
                 review_speed = review_speed_match.group(1)
             else:
@@ -87,10 +98,3 @@ if st.button("Find Journals"):
 
             journal_data.append([name, impact_factor, indexed, acceptance_rate, review_speed, link])
 
-
-
-        df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
-
-        st.write(df)
-    else:
-        st.error("Please fill in all required fields.")
