@@ -19,7 +19,7 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
         prompt += "Consider SCIE journals.\n"
     if esci:
         prompt += "Consider ESCI journals.\n"
-    prompt += "Do not consider MDPI journals."
+    prompt += "Do not consider Scopus journals."
 
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
@@ -86,8 +86,6 @@ if st.button("Find Journals"):
                 link = ""
 
             journal_data.append([name, impact_factor, indexed, acceptance_rate, review_speed, link])
-
-
 
         df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
 
