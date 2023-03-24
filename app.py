@@ -47,14 +47,44 @@ if st.button("Find Journals"):
         journal_data = []
 
         for item in result.split("\n\n"):
-            name = re.search(r"^(.*)\s*\(", item).group(1)
-            impact_factor = re.search(r"Impact Factor:\s*([\d.]+)", item).group(1)
-            indexed = re.search(r"Indexed:\s*([\w\s]+)", item).group(1)
-            acceptance_rate = re.search(r"Acceptance Rate:\s*([A-Za-z\s]+)", item).group(1) if re.search(r"Acceptance Rate:\s*([A-Za-z\s]+)", item) else "Not publicly available"
-            review_speed = re.search(r"Review Speed:\s*(.*?)\s+from", item).group(1)
-            link = re.search(r"Link:\s*(\S+)", item).group(1)
+            name_match = re.search(r"^(.*)\s*\(", item)
+            if name_match:
+                name = name_match.group(1)
+            else:
+                continue
+
+            impact_factor_match = re.search(r"Impact Factor:\s*([\d.]+)", item)
+            if impact_factor_match:
+                impact_factor = impact_factor_match.group(1)
+            else:
+                impact_factor = ""
+
+            indexed_match = re.search(r"Indexed:\s*([\w\s]+)", item)
+            if indexed_match:
+                indexed = indexed_match.group(1)
+            else:
+                indexed = ""
+
+            acceptance_rate_match = re.search(r"Acceptance Rate:\s*([A-Za-z\s]+)", item)
+            if acceptance_rate_match:
+                acceptance_rate = acceptance_rate_match.group(1)
+            else:
+                acceptance_rate = "Not publicly available"
+
+            review_speed_match = re.search(r"Review Speed:\s*(.*?)\s+from", item)
+            if review_speed_match:
+                review_speed = review_speed_match.group(1)
+            else:
+                review_speed = ""
+
+            link_match = re.search(r"Link:\s*(\S+)", item)
+            if link_match:
+                link = link_match.group(1)
+            else:
+                link = ""
 
             journal_data.append([name, impact_factor, indexed, acceptance_rate, review_speed, link])
+
 
         df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
 
