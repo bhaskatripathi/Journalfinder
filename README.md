@@ -37,10 +37,10 @@ classDiagram
         +abstract: str
         +keywords: str
         +ssci: bool
-```
         +scie: bool
         +esci: bool
     }
 
     JournalFinder -- StreamlitApp
+
 
