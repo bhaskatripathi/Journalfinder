@@ -44,16 +44,24 @@ def response_to_html_table(response):
     html_table = "<table border='1'>"
 
     # Add a header row
-    html_table += "<tr><th>Journal</th><th>Impact Factor</th><th>Indexed In</th><th>Acceptance Rate</th><th>Review Speed</th><th>URL</th></tr>"
+    html_table += "<tr><th>Journal</th><th>Impact Factor</th><th>Acceptance Rate</th><th>Review Speed</th><th>URL</th></tr>"
 
     for row in rows:
-        html_table += "<tr>"
-        columns = row.split(",")
-        for column in columns:
-            html_table += f"<td>{column.strip()}</td>"
-        html_table += "</tr>"
+        if not row:
+            continue
+
+        # Extract information from the text
+        name = row.split("Impact Factor:")[0].strip()
+        impact_factor = row.split("Impact Factor:")[1].split("Acceptance Rate:")[0].strip()
+        acceptance_rate = row.split("Acceptance Rate:")[1].split("Review Speed:")[0].strip()
+        review_speed = row.split("Review Speed:")[1].split("URL:")[0].strip()
+        url = row.split("URL:")[1].strip()
+
+        html_table += f"<tr><td>{name}</td><td>{impact_factor}</td><td>{acceptance_rate}</td><td>{review_speed}</td><td>{url}</td></tr>"
+
     html_table += "</table>"
     return html_table
+
 
 
 
