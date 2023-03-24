@@ -23,6 +23,7 @@ The application provides suggestions and should not be considered a definitive s
 The application's results should always be verified by the user and cannot be used as a substitute for professional advice.
 
 # UML
+```mermaid
 classDiagram
     class JournalFinder {
         +chat_gpt_request(api_key: str, messages: List[dict]) : str
@@ -36,8 +37,10 @@ classDiagram
         +abstract: str
         +keywords: str
         +ssci: bool
+```
         +scie: bool
         +esci: bool
     }
 
     JournalFinder -- StreamlitApp
+
