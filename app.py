@@ -1,21 +1,13 @@
-import requests
+import openai
 import streamlit as st
 
-def chat_gpt_request(api_key, prompt):
-    headers = {"Authorization": f"Bearer {api_key}"}
-    data = {
-        "inputs": prompt,
-        "options": {
-            "use_cache": False,
-            "max_tokens": 800,
-            "temperature": 0.8,
-            "top_p": 0.9,
-            "stop": None,
-        },
-    }
-    response = requests.post("https://api.openai.com/v1/engines/davinci/completions", headers=headers, json=data)
-    response.raise_for_status()
-    return response.json()["choices"][0]["text"].strip()
+def chat_gpt_request(api_key, messages):
+    openai.api_key = api_key
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages
+    )
+    return response.choices[0].message['content'].strip()
 
 def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
     prompt = f"Find the most relevant journals for the following paper based on its title, abstract, and keywords:\nTitle: {title}\nAbstract: {abstract}\nKeywords: {keywords}\n"
@@ -26,7 +18,13 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
     if esci:
         prompt += "Consider ESCI journals.\n"
     prompt += "Do not consider MDPI journals."
-    return chat_gpt_request(api_key, prompt)
+
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": prompt}
+    ]
+
+    return chat_gpt_request(api_key, messages)
 
 st.title("Journal Finder")
 
