@@ -25,7 +25,7 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
     indexed_str = ", ".join(indexed_in)
     publishers = "Sciencedirect, MDPI, IEEE, Wiley, Peerj, Emerald, PLOS"
 
-    prompt = f"Find the top 10 best-matching journals for the following paper that are indexed in {indexed_str} and are published by {publishers}. Include information on Impact Factor, Acceptance Rate, and Review Speed.\n\nTitle: {title}\n\nAbstract: {abstract}\n\nKeywords: {keywords}\n\n"
+    prompt = f"Find the top 10 best-matching journals for the following paper that are indexed in {indexed_str} and are published by {publishers}. Include information on Impact Factor, Acceptance Rate, Review Speed, and URLs.\n\nTitle: {title}\n\nAbstract: {abstract}\n\nKeywords: {keywords}\n\n"
 
     response = openai.Completion.create(
         engine="text-davinci-002",
@@ -37,6 +37,7 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
     )
 
     return response.choices[0].text.strip()
+
 
 
 st.title("Journal Finder")
