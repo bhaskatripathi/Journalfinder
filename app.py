@@ -10,7 +10,7 @@ def chat_gpt_request(api_key, messages):
     return response.choices[0].message['content'].strip()
 
 def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
-    prompt = f"Find the most relevant journals for the following paper based on its title, abstract, and keywords:\nTitle: {title}\nAbstract: {abstract}\nKeywords: {keywords}\n"
+    prompt = f"Find the most relevant journals for the following paper based on its title, abstract, and keywords, and provide details including the impact factor, indexing, acceptance rate (if available), review speed, and link to the journal's website:\nTitle: {title}\nAbstract: {abstract}\nKeywords: {keywords}\n"
     if ssci:
         prompt += "Consider SSCI journals.\n"
     if scie:
