@@ -62,9 +62,12 @@ if st.button("Find Journals"):
         for item in journal_list:
             journal_data.append(item.split("\n"))
 
-        df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
+        df = pd.DataFrame(journal_data)
+        df.columns = df.iloc[0]
+        df = df[1:]
 
         st.write(df)
     else:
         st.error("Please fill in all required fields.")
+
 
