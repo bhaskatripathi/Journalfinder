@@ -42,14 +42,20 @@ st.title("Journal Finder")
 def response_to_html_table(response):
     rows = response.split("\n")
     html_table = "<table border='1'>"
+
+    # Add a header row
+    html_table += "<tr><th>Journal</th><th>Impact Factor</th><th>Indexed In</th><th>Acceptance Rate</th><th>Review Speed</th><th>URL</th></tr>"
+
     for row in rows:
         html_table += "<tr>"
-        columns = row.split(";")
+        columns = row.split(",")
         for column in columns:
-            html_table += f"<td>{column}</td>"
+            html_table += f"<td>{column.strip()}</td>"
         html_table += "</tr>"
     html_table += "</table>"
     return html_table
+
+
 
 
 with st.sidebar:
