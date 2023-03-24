@@ -1,6 +1,7 @@
 import openai
 import streamlit as st
 import pandas as pd
+import re
 
 def chat_gpt_request(api_key, messages):
     openai.api_key = api_key
@@ -43,22 +44,20 @@ if st.button("Find Journals"):
         result = journal_finder(api_key, title, abstract, ssci, scie, esci, keywords)
 
         # Parse the results to create a dataframe
-        journals = result.split('\n\n')
         journal_data = []
 
-        for journal in journals:
-            j_data = journal.split('\n')
-            name = j_data[0].strip()
-            impact_factor = j_data[1].split(':')[1].strip()
-            indexed = j_data[2].split(':')[1].strip()
-            acceptance_rate = j_data[3].split(':')[1].strip()
-            review_speed = j_data[4].split(':')[1].strip()
-            link = j_data[5].split(':')[1].strip()
+        for item in result.split("\n\n"):
+            name = re.search(r"^(.*)\s*\(", item).group(1)
+            impact_factor = re.search(r"Impact Factor:\s*([\d.]+)", item).group(1)
+            indexed = re.search(r"Indexed:\s*([\w\s]+)", item).group(1)
+            acceptance_rate = re.search(r"Acceptance Rate:\s*([A-Za-z\s]+)", item).group(1) if re.search(r"Acceptance Rate:\s*([A-Za-z\s]+)", item) else "Not publicly available"
+            review_speed = re.search(r"Review Speed:\s*(.*?)\s+from", item).group(1)
+            link = re.search(r"Link:\s*(\S+)", item).group(1)
 
             journal_data.append([name, impact_factor, indexed, acceptance_rate, review_speed, link])
 
         df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
-        
+
         st.write(df)
     else:
         st.error("Please fill in all required fields.")
