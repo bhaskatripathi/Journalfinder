@@ -87,6 +87,8 @@ if st.button("Find Journals"):
 
             journal_data.append([name, impact_factor, indexed, acceptance_rate, review_speed, link])
 
+
+
         df = pd.DataFrame(journal_data, columns=["Journal", "Impact Factor", "Indexed", "Acceptance Rate", "Review Speed", "Link"])
 
         st.write(df)
