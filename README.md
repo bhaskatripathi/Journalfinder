@@ -2,7 +2,8 @@
 
 The Scientific Journal Finder is a web application that uses OpenAI's GPT-3 language model to suggest the best matching journals for a given research paper. The application searches for journals published by popular publishers such as Sciencedirect, MDPI, IEEE, Wiley, Peerj, Emerald, and PLOS.
 
-#### Demo Video: https://video.twimg.com/ext_tw_video/1234567890123456789/pu/vid/720x1280/abcdefg123456789.mp4?tag=10
+#### Demo Video: [![Journal Finder Demo Video](youtube.png)](https://twitter.com/i/status/1639401847495487492)
+
 
 
 
