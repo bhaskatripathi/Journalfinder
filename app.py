@@ -23,7 +23,7 @@ def journal_finder(api_key, title, abstract, ssci, scie, esci, keywords):
         indexed_in.append("ESCI")
 
     indexed_str = ", ".join(indexed_in)
-    publishers = "Sciencedirect, MDPI, IEEE, Wiley, Peerj, Emerald, PLOS"
+    publishers = "Sciencedirect, MDPI, IEEE, Wiley, Peerj, Emerald, PLOS, Taylor and Francis, Proquest"
 
     prompt = f"Find the top 10 best-matching journals for the following paper that are indexed in {indexed_str} and are published by {publishers}. Include information on Impact Factor, Acceptance Rate, Review Speed, and URLs.\n\nTitle: {title}\n\nAbstract: {abstract}\n\nKeywords: {keywords}\n\n"
 
