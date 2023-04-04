@@ -47,5 +47,5 @@ classDiagram
     }
 
     JournalFinder -- StreamlitApp
-
+```
 
